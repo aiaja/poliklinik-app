@@ -1,5 +1,7 @@
-<h1>Selamat Datang Dokter</h1>
-<form method="POST" action="/logout">
+<x-layouts.app title="Dashboard Dokter">
+  <h1>Hello dokter!</h1>
+  <form method="POST" action="/logout">
     @csrf
     <button>Logout</button>
-</form>
+  </form>
+</x-layouts.app>

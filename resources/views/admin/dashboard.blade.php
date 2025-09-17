@@ -1,5 +1,7 @@
-<h1>Selamat Datang Admin</h1>
-<form method="POST" action="/logout">
+<x-layouts.app title="Dashboard Admin">
+  <h1>Hello admin!</h1>
+  <form method="POST" action="/logout">
     @csrf
     <button>Logout</button>
-</form>
+  </form>
+</x-layouts.app>
