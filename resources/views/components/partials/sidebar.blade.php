@@ -30,14 +30,6 @@
                 <i class="right fas fa-angle-left"></i>
               </p>
             </a>
-            <ul class="nav nav-treeview">
-              <li class="nav-item">
-                <a href="{{ route('admin.dashboard') }}" class="nav-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Dashboard v1</p>
-                </a>
-              </li>
-            </ul>
           </li>
           <li class="nav-item">
             <a href="/polis" class="nav-link">
@@ -47,20 +39,19 @@
                 <i class="right fas fa-angle-left"></i>
               </p>
             </a>
-            <ul class="nav nav-treeview">
-              <li class="nav-item">
-                <a href="{{ route('admin.dashboard') }}" class="nav-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Dashboard v1</p>
-                </a>
-              </li>
-            </ul>
           </li>
           <li class="nav-item">
   <a href="{{ route('dokter.index') }}"
     class="nav-link {{ request()->routeIs('dokter.*') ? 'active' : '' }}">
     <i class="nav-icon fas fa-user-md"></i>
     <p>Manajemen Dokter</p>
+  </a>
+</li>
+          <li class="nav-item">
+  <a href="{{ route('pasien.index') }}"
+    class="nav-link {{ request()->routeIs('pasien.*') ? 'active' : '' }}">
+    <i class="nav-icon fas fa-user-md"></i>
+    <p>Manajemen Pasien</p>
   </a>
 </li>
 
