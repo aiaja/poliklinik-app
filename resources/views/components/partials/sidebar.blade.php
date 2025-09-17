@@ -54,6 +54,13 @@
     <p>Manajemen Pasien</p>
   </a>
 </li>
+          <li class="nav-item">
+  <a href="{{ route('obat.index') }}"
+    class="nav-link {{ request()->routeIs('obat.*') ? 'active' : '' }}">
+    <i class="nav-icon fas fa-user-md"></i>
+    <p>Manajemen Obat</p>
+  </a>
+</li>
 
         @endif
 
