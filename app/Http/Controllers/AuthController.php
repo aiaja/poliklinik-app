@@ -4,18 +4,17 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
 use App\Models\User;
-
+use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
-    public function showLogin()
+    public function ShowLogin()
     {
-        return view('auth.Login');
+        return view('auth.login');
     }
 
-    public function login(Request $request)
+    public function Login(Request $request)
     {
         $credentials = $request->only('email', 'password');
 
@@ -29,11 +28,11 @@ class AuthController extends Controller
                 return redirect()->route('pasien.dashboard');
             }
         }
-
-        return back()->withErrors(['email' => 'Email atau password salah']);
+        return redirect()->back()->withErrors(['email' => 'Email atau password salah']);
     }
 
-    public function showRegister()
+
+    public function ShowRegister()
     {
         return view('auth.register');
     }
@@ -41,14 +40,26 @@ class AuthController extends Controller
     public function register(Request $request)
     {
         $request->validate([
-            'nama' => ['required', 'string', 'max:255'],
+            'nama' => ['required' ,'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email'],
-            'password' => ['required', 'confirmed'],
+            'password' => ['required' , 'confirmed'],
             'alamat' => ['required', 'string', 'max:255'],
-            'no_hp' => ['required', 'numeric', 'max:50'],
-            'no_ktp' => ['required', 'numeric', 'max:255'],
+            'no_hp' => ['required', 'string', 'max:15'],
+            'no_ktp' => ['required', 'string', 'max:225'],
         ]);
 
+        if(User::where('no_ktp', $request->no_ktp)->exists()){
+            return redirect()->back()->withErrors(['no_ktp' => 'No KTP sudah terdaftar']);
+        }
+
+        $no_rm = date('Ym') . '-' .str_pad(
+            User::where('no_rm', 'like', date('Ym') . '-%')->count() + 1,
+            3,
+            '0',
+            STR_PAD_LEFT
+        );
+
+        // Buat user baru
         User::create([
             'nama' => $request->nama,
             'email' => $request->email,
@@ -56,13 +67,13 @@ class AuthController extends Controller
             'alamat' => $request->alamat,
             'no_hp' => $request->no_hp,
             'no_ktp' => $request->no_ktp,
+            'no_rm' => $no_rm,
             'role' => 'pasien',
         ]);
-
         return redirect()->route('login');
     }
 
-    public function logout()
+    public function Logout()
     {
         Auth::logout();
         return redirect()->route('login');
