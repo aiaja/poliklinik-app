@@ -31,7 +31,7 @@
               </p>
             </a>
           </li>
-          <li class="nav-item">
+          <!-- <li class="nav-item">
             <a href="/polis" class="nav-link">
               <i class="nav-icon fas fa-tachometer-alt"></i>
               <p>
@@ -39,6 +39,14 @@
                 <i class="right fas fa-angle-left"></i>
               </p>
             </a>
+          </li> -->
+          <li class="nav-item">
+  <a href="{{ route('poli.index') }}"
+    class="nav-link {{ request()->routeIs('poli.*') ? 'active' : '' }}">
+    <i class="nav-icon fas fa-user-md"></i>
+    <p>Manajemen Poli</p>
+  </a>
+</li>
           </li>
           <li class="nav-item">
   <a href="{{ route('dokter.index') }}"
