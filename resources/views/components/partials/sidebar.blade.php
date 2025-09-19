@@ -124,6 +124,13 @@
     <p>Periksa Pasien</p>
   </a>
 </li>
+          <li class="nav-item">
+  <a href="{{ route('riwayat-pasien.index') }}"
+    class="nav-link {{ request()->routeIs('riwayat-pasien.*') ? 'active' : '' }}">
+    <i class="nav-icon fas fa-user-md"></i>
+    <p>Riwayat Pasien</p>
+  </a>
+</li>
 
         @endif
       </ul>
