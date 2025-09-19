@@ -8,7 +8,7 @@ use App\Http\Controllers\Admin\ObatController;
 use App\Http\Controllers\Admin\PasienController;
 use App\Http\Controllers\Admin\PoliController;
 use App\Http\Controllers\Pasien\PoliController as PasienPoliController;
-use App\Http\Controllers\Pasien\JadwalPeriksaController;
+use App\Http\Controllers\Dokter\JadwalPeriksaController;
 
 Route::get('/', function () {
     return view('welcome');

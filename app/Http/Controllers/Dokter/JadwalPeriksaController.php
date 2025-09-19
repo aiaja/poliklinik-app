@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Pasien;
+namespace App\Http\Controllers\Dokter;
 
 use App\Models\JadwalPeriksa;
 use App\Http\Controllers\Controller;
