@@ -1,11 +1,13 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
 use App\Models\User;
 use App\Models\Poli;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use App\Http\Controllers\Controller;
+use Illuminate\Validation\Rule;
 
 class DokterController extends Controller
 {
@@ -49,19 +51,34 @@ class DokterController extends Controller
             ->with('type', 'success');
     }
 
-    public function edit(User $dokter)
+    public function edit($id)
     {
         $polis = Poli::all();
+        $dokter = User::where('role', 'dokter')->findOrFail($id);
         return view('admin.dokter.edit', compact('dokter', 'polis'));
     }
 
     public function update(Request $request, User $dokter)
     {
-        $request->validate([
+        $validated = $request->validate([
             'nama' => 'required|string|max:255',
             'alamat' => 'required|string',
             'no_ktp' => 'required|string|max:16|unique:users,no_ktp,' . $dokter->id,
             'no_hp' => 'required|string|max:15',
+            'id_poli' => 'required|exists:poli,id',
+            'email' => ['required', 'email', Rule::unique('users', 'email')->ignore($dokter->id)],
+            'password' => 'nullable|string|min:6',
         ]);
+
+        $data = $validated;
+        if(!empty($validated['password'])){
+            $data['password'] = Hash::make($validated['password']);
+        } else {
+            unset($data['password']);
+        }
+
+        $dokter->update($data);
+
+        return redirect()->route('dokter.index')->with('messages', 'Dokter berhasil diperbarui.')->with('type', 'success');
     }
 }
