@@ -117,6 +117,13 @@
     <p>Jadwal Periksa</p>
   </a>
 </li>
+          <li class="nav-item">
+  <a href="{{ route('periksa-pasien.index') }}"
+    class="nav-link {{ request()->routeIs('periksa-pasien.*') ? 'active' : '' }}">
+    <i class="nav-icon fas fa-user-md"></i>
+    <p>Periksa Pasien</p>
+  </a>
+</li>
 
         @endif
       </ul>

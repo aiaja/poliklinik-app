@@ -43,6 +43,6 @@ class User extends Authenticatable
 
     public function jadwalPeriksas()
     {
-        return $this->hasMany(Periksas::class, 'id_daftar_poli');
+        return $this->hasMany(JadwalPeriksa::class, 'id_dokter');
     }
 }
