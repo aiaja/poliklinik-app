@@ -31,15 +31,6 @@
               </p>
             </a>
           </li>
-          <!-- <li class="nav-item">
-            <a href="/polis" class="nav-link">
-              <i class="nav-icon fas fa-tachometer-alt"></i>
-              <p>
-                Manajemen Poli
-                <i class="right fas fa-angle-left"></i>
-              </p>
-            </a>
-          </li> -->
           <li class="nav-item">
   <a href="{{ route('poli.index') }}"
     class="nav-link {{ request()->routeIs('poli.*') ? 'active' : '' }}">
@@ -112,6 +103,13 @@
               </li>
             </ul>
           </li>
+          <li class="nav-item">
+  <a href="{{ route('jadwal-periksa.index') }}"
+    class="nav-link {{ request()->routeIs('jadwal-periksa.*') ? 'active' : '' }}">
+    <i class="nav-icon fas fa-user-md"></i>
+    <p>Jadwal Periksa</p>
+  </a>
+</li>
 
         @endif
       </ul>
