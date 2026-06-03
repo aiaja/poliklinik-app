@@ -1,72 +1,102 @@
 <x-layouts.app title="Data Obat">
-  <div class="container-fluid px-4 mt-4">
-    <div class="row">
-      <div class="col-lg-12">
-        {{-- ALERT FLASH MESSAGE --}}
-        @if (session('message'))
-          <div class="alert alert-{{ session('type', 'success') }} alert-dismissible fade show" role="alert">
-            {{ session('message') }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-          </div>
-        @endif
 
-        <h1 class="mb-4">Data Obat</h1>
+    {{-- Header --}}
+    <div class="flex items-center justify-between mb-6">
+        <h2 class="text-2xl font-bold text-slate-800">
+            Data Obat
+        </h2>
 
-        <a href="{{ route('obat.create') }}" class="btn btn-primary mb-3">
-          <i class="fas fa-plus"></i> Tambah Obat
+        <a href="{{ route('obat.create') }}" class="inline-flex items-center gap-2 px-5 py-2.5 
+                  bg-primary hover:bg-primary/90 
+                  text-white text-sm font-semibold 
+                  rounded-xl transition">
+            <i class="fas fa-plus text-xs"></i>
+            Tambah Obat
         </a>
-
-        <div class="table-responsive">
-          <table class="table table-bordered">
-            <thead class="thead-light">
-              <tr>
-                <th>ID</th>
-                <th>Nama Obat</th>
-                <th>Kemasan</th>
-                <th>Harga</th>
-                <th style="width: 150px;">Aksi</th>
-              </tr>
-            </thead>
-            <tbody>
-              @forelse ($obats as $obat)
-                <tr>
-                  <td>{{ $obat->id }}</td>
-                  <td>{{ $obat->nama_obat }}</td>
-                  <td>{{ $obat->kemasan }}</td>
-                  <td>{{ number_format($obat->harga, 0, ',', '.') }}</td>
-                  <td>
-                    <a href="{{ route('obat.edit', $obat->id) }}" class="btn btn-sm btn-warning">
-                      <i class="fas fa-edit"></i> Edit
-                    </a>
-                    <form action="{{ route('obat.destroy', $obat->id) }}" method="POST" style="display:inline-block;">
-                      @csrf
-                      @method('DELETE')
-                      <button class="btn btn-sm btn-danger" onclick="return confirm('Yakin ingin menghapus obat ini?')">
-                        <i class="fas fa-trash"></i> Hapus
-                      </button>
-                    </form>
-                  </td>
-                </tr>
-              @empty
-                <tr>
-                  <td colspan="5" class="text-center">Belum ada data obat</td>
-                </tr>
-              @endforelse
-            </tbody>
-          </table>
-        </div>
-      </div>
     </div>
-  </div>
 
-  <script>
-    setTimeout(() => {
-      const alert = document.querySelector('.alert');
-      if (alert) {
-        alert.classList.remove('show');
-        alert.classList.add('fade');
-        setTimeout(() => alert.remove(), 500);
-      }
-    }, 2000);
-  </script>
+    {{-- Card --}}
+    <div class="card bg-base-100 shadow-md rounded-2 border">
+        <div class="card-body p-0">
+
+            <div class="overflow-x-auto">
+                <table class="table w-full">
+
+                    {{-- Table Head --}}
+                    <thead class="bg-slate-50 text-slate-500 uppercase text-xs tracking-wider">
+                        <tr>
+                            <th class="px-6 py-4">Nama Obat</th>
+                            <th class="px-6 py-4">Kemasan</th>
+                            <th class="px-6 py-4">Harga</th>
+                            <th class="px-6 py-4 text-right">Aksi</th>
+                        </tr>
+                    </thead>
+
+                    {{-- Table Body --}}
+                    <tbody class="text-sm text-slate-700">
+                        @forelse($obats as $obat)
+                        <tr class="border-t border-slate-100 hover:bg-slate-50 transition">
+
+                            <td class="px-6 py-4 font-semibold text-slate-800">
+                                {{ $obat->nama_obat }}
+                            </td>
+
+                            <td class="px-6 py-4">
+                                <span class="inline-block px-3 py-1 text-xs font-semibold 
+                                             rounded-full bg-green-100 text-green-600">
+                                    {{ $obat->kemasan ?? '-' }}
+                                </span>
+                            </td>
+
+                            <td class="px-6 py-4 font-semibold text-slate-800">
+                                Rp {{ number_format($obat->harga, 0, ',', '.') }}
+                            </td>
+
+                            <td class="px-6 py-4 text-right">
+                                <div class="flex justify-end gap-2">
+
+                                    {{-- Edit --}}
+                                    <a href="{{ route('obat.edit', $obat->id) }}" class="inline-flex items-center gap-1 px-4 py-2 
+                                              bg-amber-500 hover:bg-amber-600 
+                                              text-white text-xs font-semibold 
+                                              rounded-lg transition">
+                                        <i class="fas fa-pen text-xs"></i>
+                                        Edit
+                                    </a>
+
+                                    {{-- Delete --}}
+                                    <form action="{{ route('obat.destroy', $obat->id) }}" method="POST">
+                                        @csrf
+                                        @method('DELETE')
+
+                                        <button type="submit"
+                                            onclick="return confirm('Yakin ingin menghapus obat ini?')" class="inline-flex items-center gap-1 px-4 py-2 
+                                                   bg-red-500 hover:bg-red-600 
+                                                   text-white text-xs font-semibold 
+                                                   rounded-lg transition">
+                                            <i class="fas fa-trash text-xs"></i>
+                                            Hapus
+                                        </button>
+                                    </form>
+
+                                </div>
+                            </td>
+
+                        </tr>
+                        @empty
+                        <tr>
+                            <td colspan="4" class="text-center py-12 text-slate-400">
+                                <i class="fas fa-inbox text-3xl mb-3 block"></i>
+                                Belum ada data obat
+                            </td>
+                        </tr>
+                        @endforelse
+                    </tbody>
+
+                </table>
+            </div>
+
+        </div>
+    </div>
+
 </x-layouts.app>

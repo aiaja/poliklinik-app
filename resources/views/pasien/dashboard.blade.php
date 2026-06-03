@@ -1,7 +1,8 @@
-<x-layouts.app title="Dashboard Pasien">
-  <h1>Hello pasien!</h1>
-  <form method="POST" action="/logout">
-    @csrf
-    <button>Logout</button>
-  </form>
+<x-layouts.app title="Pasien">
+    <h1 class="text-3xl font-bold">
+        Halo, {{ Auth::user()->name }} 👋
+    </h1>
+    <p class="text-gray-500">
+        Selamat datang di Dashboard Pasien
+    </p>
 </x-layouts.app>

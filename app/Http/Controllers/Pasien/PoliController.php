@@ -3,10 +3,10 @@
 namespace App\Http\Controllers\Pasien;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use App\Models\Poli;
-use App\Models\JadwalPeriksa;
 use App\Models\DaftarPoli;
+use App\Models\JadwalPeriksa;
+use App\Models\Poli;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class PoliController extends Controller
@@ -15,33 +15,34 @@ class PoliController extends Controller
     {
         $user = Auth::user();
         $polis = Poli::all();
-        $jadwals = JadwalPeriksa::with('dokter', 'dokter.poli')->get();
+        $jadwal = JadwalPeriksa::with('dokter', 'dokter.poli')->get();
 
         return view('pasien.daftar', [
             'user' => $user,
             'polis' => $polis,
-            'jadwals' => $jadwals,
+            'jadwals' => $jadwal,
         ]);
     }
 
     public function submit(Request $request)
     {
         $request->validate([
-            'id_poli' => 'required|exists:poli,id',
+            // 'id_poli' => 'required|exists:poli,id',
             'id_jadwal' => 'required|exists:jadwal_periksa,id',
-            'keluhan' => 'nullable|string'
+            'keluhan' => 'nullable|string',
+            'id_pasien' => 'required|exists:users,id',
         ]);
 
         $jumlahSudahDaftar = DaftarPoli::where('id_jadwal', $request->id_jadwal)->count();
-
-        DaftarPoli::create([
-            'id_poli' => $request->id_poli,
-            'id_pasien' => Auth::id(),
+        $daftar = DaftarPoli::create([
+            'id_pasien' => $request->id_pasien, //Auth::id(),
             'id_jadwal' => $request->id_jadwal,
             'keluhan' => $request->keluhan,
             'no_antrian' => $jumlahSudahDaftar + 1,
         ]);
 
-        return redirect()->back()->with('message', 'Pendaftaran Berhasil.')->with('type', 'success');
+        // dd($daftar);
+
+        return redirect()->back()->with('message', 'Berhasil Mendaftar ke Poli')->with('type', 'success');
     }
 }

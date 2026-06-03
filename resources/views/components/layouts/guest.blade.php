@@ -1,22 +1,37 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id" data-theme="light">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>{{ $title ?? 'Login' }}</title>
-  <link rel="stylesheet" href="{{ mix('css/app.css') }}">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGR9NSGLF/aIDqB7QxQYcxdIrwxfjThSH8C7SRPBEakCr51Ck+++/U6sWU21mIVX0SXVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/css/adminlte.min.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap4.6.2/dist/css/bootstrap.min.css" integrity="sha384-XOoLFHFLH6FP7JGoKPvL11bCPTNtaed2xpH5D9ESMhiqTYdOnLMwNLd69NpY4HiN" crossorigin="anonymous" />
-  @stack('styles')
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{{ $title ?? 'Poliklinik' }}</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap"
+        rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
+        crossorigin="anonymous" />
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@5/daisyui.css" rel="stylesheet" type="text/css" />
+
+    @vite(['resources/js/app.js', 'resources/css/app.css'])
+
+    <style>
+        * {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        .brand-serif {
+            font-family: 'Instrument Serif', serif;
+        }
+    </style>
 </head>
 
-<body class="hold-transition sidebar-mini layout-fixed min-vh-100">
-  {{ $slot }}
+<body
+    style="min-height:100vh;background:linear-gradient(135deg,#1e2d6b 0%,#2d4499 60%,#1a2d7a 100%);display:flex;align-items:center;justify-content:center;padding:24px;">
 
-  <script src="{{ mix('js/app.js') }}"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-8946E0Y5iQhQ58gReFfYmdwKloStNtvYSaNCoP+uTgYdvhz0PPSliqn/3e7Jo4E4g7TubfWgURMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-  <script src="https://cdn.jsdelivr.net/npm/admin-lte@3.1/dist/js/adminlte.min.js"></script>
-  @stack('scripts')
+    {{ $slot }}
+    @stack('scripts')
 </body>
+
 </html>

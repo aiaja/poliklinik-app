@@ -2,92 +2,76 @@
 
 namespace App\Http\Controllers\Dokter;
 
-use App\Models\JadwalPeriksa;
 use App\Http\Controllers\Controller;
+use App\Models\JadwalPeriksa;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class JadwalPeriksaController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        $dokter = Auth()->user();
-        $jadwalPeriksas = JadwalPeriksa::where('id_dokter', $dokter->id)
-            ->orderBy('hari','asc')
-            ->get();
-        return view('dokter.jadwal-periksa.index',compact('jadwalPeriksas'));
+    public function index(){
+        // 1. Ambil user dari auth
+        $dokter = Auth::user();
+        // 2. ambil id_dokter ambil hanya hari
+        $jadwalPeriksas = JadwalPeriksa::where('id_dokter', $dokter->id)->orderBy('hari')->get();
+        // 3. return
+        return view('dokter.jadwal-periksa.index', compact('jadwalPeriksas'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
+    public function create(){
         return view('dokter.jadwal-periksa.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        $dokter = Auth()->user();
-
-        $validatedData = $request->validate([
-            'hari' => 'required|string|max:20',
+    public function store(Request $request){
+        $request->validate([
+            'hari' => 'required',
             'jam_mulai' => 'required',
-            'jam_selesai' => 'required|after:jam_mulai',
+            'jam_selesai' => 'required'
         ]);
 
-        $validatedData['id_dokter'] = $dokter->id;
+        JadwalPeriksa::create([
+            'id_dokter' => Auth::user()->id,
+            // 'id_dokter' => Auth::id(),
+            'hari' => $request->hari,
+            'jam_mulai' => $request->jam_mulai,
+            'jam_selesai' => $request->jam_selesai
+        ]);
 
-        JadwalPeriksa::create($validatedData);
-
-        return redirect()->route('jadwal-periksa.index')->with('message', 'Jadwal Periksa berhasil ditambahkan!');
+        return redirect()->route('jadwal-periksa.index')
+            ->with('message', 'Data Berhasil di Simpan')
+            ->with('type', 'success');
     }
 
-    /**
-     * Display the specified resource.
-    */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-    */
-    public function edit(string $id)
-    {
+    public function edit($id){
         $jadwalPeriksa = JadwalPeriksa::findOrFail($id);
-        return view('dokter.jadwal-periksa.edit', compact('jadwalPeriksa'));
+        return view('dokter.jadwal-periksa.edit',compact('jadwalPeriksa'));
     }
 
-    /**
-     * Update the specified resource in storage.
-    */
-    public function update(Request $request, string $id)
-    {
-        $validatedData = $request->validate([
-            'hari' => 'required|string|max:20',
+    public function update(Request $request, string $id){
+        $request->validate([
+            'hari' => 'required',
             'jam_mulai' => 'required',
-            'jam_selesai' => 'required|after:jam_mulai',
+            'jam_selesai' => 'required'
         ]);
 
-        JadwalPeriksa::where('id', $id)->update($validatedData);
+        $jadwalPeriksa = JadwalPeriksa::findOrFail($id);
+        $jadwalPeriksa->update([
+            'hari' => $request->hari,
+            'jam_mulai' => $request->jam_mulai,
+            'jam_selesai' => $request->jam_selesai
+        ]);
 
-        return redirect()->route('jadwal-periksa.index')->with('message', 'Jadwal Periksa berhasil diperbaharui!');
+        return redirect()->route('jadwal-periksa.index')
+            ->with('message','Berhasil Melakukan Update Data')
+            ->with('type','success');
     }
 
-    /**
-     * Remove the specified resource from storage.
-    */
-    public function destroy(string $id)
-    {
+    public function destroy(string $id){
         $jadwalPeriksa = JadwalPeriksa::findOrFail($id);
         $jadwalPeriksa->delete();
-        return redirect()->route('jadwal-periksa.index')->with('message', 'Jadwal Periksa berhasil dihapus!')->with('type', 'success');
+
+        return redirect()->route('jadwal-periksa.index')
+            ->with('message','Berhasil Melakukan Hapus Data')
+            ->with('type','success');
     }
 }

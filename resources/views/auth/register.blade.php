@@ -1,135 +1,158 @@
-{{-- <h2>Register</h2> --}}
+<x-layouts.guest title="Register">
 
-@if ($errors->any())
-  <ul style="color:red">
-    @foreach ($errors->all() as $err)
-      <li>{{ $err }}</li>
-    @endforeach
-  </ul>
-@endif
+    <div class="card bg-base-100 shadow-2xl rounded-2xl w-full max-w-[480px]">
+        <div class="card-body p-[40px]">
 
-<form method="POST" action="{{ route('register') }}">
-  @csrf
-  <label>Nama Lengkap:</label><br>
-  <input type="text" name="nama" required><br>
+            {{-- Logo & Title --}}
+            <div class="text-center mb-7">
+                <img src="{{ asset('images/logo-bengkot.png') }}"
+                     class="w-[60px] h-[60px] rounded-[16px] object-cover mx-auto mb-[14px] block">
+                <h1 class="text-[1.5rem] font-extrabold text-[#1e2d6b] m-0 mb-[6px]">Poliklinik</h1>
+                <p class="text-[0.83rem] text-slate-400 m-0">Buat akun baru</p>
+            </div>
 
-  <label>Email:</label><br>
-  <input type="email" name="email" required><br>
+            {{-- Error Alert --}}
+            @if ($errors->any())
+                <div class="alert alert-error mb-4 rounded-xl text-[0.83rem]">
+                    <i class="fas fa-circle-xmark"></i>
+                    <span>{{ $errors->first() }}</span>
+                </div>
+            @endif
 
-  <label>Alamat:</label><br>
-  <input type="text" name="alamat" required><br>
+            <form action="{{ route('register') }}" method="POST">
+                @csrf
 
-  <label>No HP:</label><br>
-  <input type="text" name="no_hp" required><br>
+                {{-- Nama Lengkap --}}
+                <div class="form-control mb-4">
+                    <label class="label pb-1">
+                        <span class="text-[0.82rem] font-semibold text-gray-700">Nama Lengkap</span>
+                    </label>
+                    <label class="input input-bordered flex items-center gap-3 w-full rounded-[10px] border-slate-200 bg-slate-50">
+                        <i class="fas fa-user text-slate-400 text-[0.82rem]"></i>
+                        <input type="text" name="nama" value="{{ old('nama') }}"
+                               placeholder="Masukkan nama lengkap..."
+                               class="grow bg-transparent text-slate-800 text-[0.88rem]"
+                               required>
+                    </label>
+                </div>
 
-  <label>No KTP:</label><br>
-  <input type="text" name="no_ktp" required><br>
+                {{-- Email --}}
+                <div class="form-control mb-4">
+                    <label class="label pb-1">
+                        <span class="text-[0.82rem] font-semibold text-gray-700">Email</span>
+                    </label>
+                    <label class="input input-bordered flex items-center gap-3 w-full rounded-[10px] border-slate-200 bg-slate-50">
+                        <i class="fas fa-envelope text-slate-400 text-[0.82rem]"></i>
+                        <input type="email" name="email" value="{{ old('email') }}"
+                               placeholder="Masukkan email..."
+                               class="grow bg-transparent text-slate-800 text-[0.88rem]"
+                               required>
+                    </label>
+                </div>
 
-  <label>Password:</label><br>
-  <input type="password" name="password" required><br>
+                {{-- Alamat --}}
+                <div class="form-control mb-4">
+                    <label class="label pb-1">
+                        <span class="text-[0.82rem] font-semibold text-gray-700">Alamat</span>
+                    </label>
+                    <label class="input input-bordered flex items-center gap-3 w-full rounded-[10px] border-slate-200 bg-slate-50">
+                        <i class="fas fa-map-marker-alt text-slate-400 text-[0.82rem]"></i>
+                        <input type="text" name="alamat" value="{{ old('alamat') }}"
+                               placeholder="Masukkan alamat..."
+                               class="grow bg-transparent text-slate-800 text-[0.88rem]"
+                               required>
+                    </label>
+                </div>
 
-  <label>Konfirmasi Password:</label><br>
-  <input type="password" name="password_confirmation" required><br><br>
+                {{-- No. HP & No. KTP --}}
+                <div class="grid grid-cols-2 gap-[14px] mb-4">
+                    <div class="form-control">
+                        <label class="label pb-1">
+                            <span class="text-[0.82rem] font-semibold text-gray-700">No. HP</span>
+                        </label>
+                        <label class="input input-bordered flex items-center gap-2 rounded-[10px] border-slate-200 bg-slate-50">
+                            <i class="fas fa-phone text-slate-400 text-[0.78rem]"></i>
+                            <input type="number" name="no_hp" value="{{ old('no_hp') }}"
+                                   placeholder="No. HP..."
+                                   class="grow bg-transparent text-slate-800 text-[0.85rem]"
+                                   required>
+                        </label>
+                    </div>
+                    <div class="form-control">
+                        <label class="label pb-1">
+                            <span class="text-[0.82rem] font-semibold text-gray-700">No. KTP</span>
+                        </label>
+                        <label class="input input-bordered flex items-center gap-2 rounded-[10px] border-slate-200 bg-slate-50">
+                            <i class="fas fa-address-card text-slate-400 text-[0.78rem]"></i>
+                            <input type="number" name="no_ktp" value="{{ old('no_ktp') }}"
+                                   placeholder="No. KTP..."
+                                   class="grow bg-transparent text-slate-800 text-[0.85rem]"
+                                   required>
+                        </label>
+                    </div>
+                </div>
 
-  <button type="submit">Daftar</button>
-</form>
+                {{-- Password --}}
+                <div class="form-control mb-4">
+                    <label class="label pb-1">
+                        <span class="text-[0.82rem] font-semibold text-gray-700">Password</span>
+                    </label>
+                    <label class="input input-bordered flex items-center gap-2 w-full rounded-[10px] border-slate-200 bg-slate-50">
+                        <i class="fas fa-lock text-slate-400 text-[0.78rem]"></i>
+                        <input type="password" name="password" id="password_reg"
+                               placeholder="Password..."
+                               class="grow bg-transparent text-slate-800 text-[0.85rem]"
+                               required>
+                        <i class="fas fa-eye text-slate-400 text-[0.78rem] cursor-pointer" id="toggle_reg"
+                           onclick="togglePassword('password_reg', 'toggle_reg')"></i>
+                    </label>
+                </div>
 
-<p class="mb-0">
-  Sudah punya akun? <a href="{{ route('login') }}">Login</a>
-</p>
+                {{-- Konfirmasi Password --}}
+                <div class="form-control mb-6">
+                    <label class="label pb-1">
+                        <span class="text-[0.82rem] font-semibold text-gray-700">Konfirmasi Password</span>
+                    </label>
+                    <label class="input input-bordered flex items-center gap-2 w-full rounded-[10px] border-slate-200 bg-slate-50">
+                        <i class="fas fa-lock text-slate-400 text-[0.78rem]"></i>
+                        <input type="password" name="password_confirmation" id="password_confirm"
+                               placeholder="Ulangi password..."
+                               class="grow bg-transparent text-slate-800 text-[0.85rem]"
+                               required>
+                        <i class="fas fa-eye text-slate-400 text-[0.78rem] cursor-pointer" id="toggle_confirm"
+                           onclick="togglePassword('password_confirm', 'toggle_confirm')"></i>
+                    </label>
+                </div>
 
-<x-layouts.guest>
-  <div class="login-box d-flex flex-column justify-content-center align-items-center w-100 vh-100">
-    <div class="login-logo">
-      <a href="/login"><b>Poliklinik</b></a>
+                {{-- Submit Button --}}
+                <button type="submit" class="btn-primary-gradient">
+                    <i class="fas fa-user-plus"></i> Register
+                </button>
+            </form>
+
+            <p class="text-center mt-5 text-[0.83rem] text-slate-400">
+                Sudah punya akun?
+                <a href="{{ route('login') }}" class="text-[#2d4499] font-bold no-underline">Login</a>
+            </p>
+
+        </div>
     </div>
-    <!-- .login-logo -->
-    <div class="card">
-      <div class="card-body login-card-body">
-        <p class="login-box-msg">Harap daftar terlebih dahulu!</p>
-        <form method="POST" action="{{ route('register') }}">
-          @csrf
-          <div class="input-group mb-3">
-            <input class="form-control" type="text" name="nama" required placeholder="Nama Lengkap">
-            <div class="input-group-append">
-              <div class="input-group-text">
-                <span class="fas fa-user"></span>
-              </div>
-            </div>
-          </div>
 
-          <div class="input-group mb-3">
-            <input class="form-control" type="email" name="email" required placeholder="Email">
-            <div class="input-group-append">
-              <div class="input-group-text">
-                <span class="fas fa-envelope"></span>
-              </div>
-            </div>
-          </div>
+    @push('scripts')
+    <script>
+        function togglePassword(inputId, iconId) {
+            const input = document.getElementById(inputId);
+            const icon = document.getElementById(iconId);
 
-          <div class="input-group mb-3">
-            <input class="form-control" type="text" name="alamat" required placeholder="Alamat">
-            <div class="input-group-append">
-              <div class="input-group-text">
-                <span class="fas fa-location-dot"></span>
-              </div>
-            </div>
-          </div>
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.classList.replace('fa-eye', 'fa-eye-slash');
+            } else {
+                input.type = 'password';
+                icon.classList.replace('fa-eye-slash', 'fa-eye');
+            }
+        }
+    </script>
+    @endpush
 
-          <div class="input-group mb-3">
-            <input class="form-control" type="text" name="no_hp" required placeholder="No HP">
-            <div class="input-group-append">
-              <div class="input-group-text">
-                <span class="fas fa-mobile-alt"></span>
-              </div>
-            </div>
-          </div>
-
-          <div class="input-group mb-3">
-            <input class="form-control" type="text" name="no_ktp" required placeholder="No KTP">
-            <div class="input-group-append">
-              <div class="input-group-text">
-                <span class="fas fa-id-card"></span>
-              </div>
-            </div>
-          </div>
-
-          <div class="input-group mb-3">
-            <input type="password" class="form-control" name="password" required placeholder="Password">
-            <div class="input-group-append">
-              <div class="input-group-text">
-                <span class="fas fa-lock"></span>
-              </div>
-            </div>
-          </div>
-
-          <div class="input-group mb-3">
-            <input type="password" class="form-control" name="password_confirmation" required placeholder="Password Confirmation">
-            <div class="input-group-append">
-              <div class="input-group-text">
-                <span class="fas fa-lock"></span>
-              </div>
-            </div>
-          </div>
-
-          @if ($errors->any())
-            <ul style="color:red">
-              @foreach ($errors->all() as $err)
-                <li>{{ $err }}</li>
-              @endforeach
-            </ul>
-          @endif
-
-          <div class="row">
-            <div class="col-8">
-              <button type="submit" class="btn btn-primary">Daftar</button>
-            </div>
-          </div>
-        </form>
-      </div>
-    </div>
-    <p class="mb-0">
-      Sudah punya akun? <a href="{{ route('login') }}">Login</a>
-    </p>
-  </div>
 </x-layouts.guest>

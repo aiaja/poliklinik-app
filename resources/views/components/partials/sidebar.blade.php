@@ -1,139 +1,163 @@
-<aside class="main-sidebar sidebar-dark-primary elevation-4">
-  <!-- Brand Logo -->
-  <a href="#" class="brand-link">
-    <!-- <img src="https://www.gravatar.com/avatar/2c7d9f6f281ecd3bd65ab915bca6dd57s=250" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8"> -->
-    <span class="brand-text font-weight-light">Poliklinik</span>
-  </a>
+<aside class="w-full bg-transparent text-slate-300 flex flex-col min-h-screen">
 
-  <!-- Sidebar -->
-  <div class="sidebar">
-    <!-- Sidebar user (optional) -->
-    <div class="user-panel mt-3 pb-3 mb-3 d-flex">
-      <div class="image">
-        <img src="https://www.gravatar.com/avatar/2c7d9f6f281ecd3bd65ab915bca6dd57s=100" class="img-circle elevation-2" alt="User Image">
-      </div>
-      <div class="info">
-        <a href="#" class="d-block">Halo! {{ Auth::user()->nama }}</a>
-      </div>
+    {{-- ================= BRAND ================= --}}
+    <div class="px-5 py-5 border-b border-white/10">
+        <div class="flex items-center gap-3">
+            <img src="{{ asset('images/logo-bengkot.png') }}" class="w-10 h-10 rounded-xl object-cover">
+
+            <div>
+                <div class="font-bold text-white text-lg leading-tight">
+                    Poliklinik
+                </div>
+
+                @if(request()->is('admin*'))
+                <span
+                    class="text-[10px] font-bold uppercase tracking-wider bg-indigo-400/20 text-indigo-300 border border-indigo-400/30 px-2 py-0.5 rounded-md">
+                    Admin
+                </span>
+                @elseif(request()->is('dokter*'))
+                <span
+                    class="text-[10px] font-bold uppercase tracking-wider bg-purple-400/20 text-purple-300 border border-purple-400/30 px-2 py-0.5 rounded-md">
+                    Dokter
+                </span>
+                @elseif(request()->is('pasien*'))
+                <span
+                    class="text-[10px] font-bold uppercase tracking-wider bg-amber-400/20 text-amber-300 border border-amber-400/30 px-2 py-0.5 rounded-md">
+                    Pasien
+                </span>
+                @endif
+            </div>
+        </div>
     </div>
 
-    <!-- Sidebar Menu -->
-    <nav class="mt-2">
-      <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-        <!-- ROLE ADMIN -->
-        @if (request()->is('admin*'))
-          <li class="nav-item">
-            <a href="/dashboard" class="nav-link">
-              <i class="nav-icon fas fa-tachometer-alt"></i>
-              <p>
+
+    {{-- ================= MENU ================= --}}
+    <div class="flex-1 overflow-y-auto px-3 py-4">
+
+        @php
+        $baseLink = "flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm transition-all duration-200";
+        $inactive = "text-slate-300 hover:bg-white/10 hover:text-white";
+        $active = "bg-gradient-to-r from-white/20 to-white/5 text-white font-semibold border border-indigo-400 border-2";
+        @endphp
+
+
+        {{-- ================= ADMIN ================= --}}
+        @if(request()->is('admin*'))
+
+        <p class="text-xs font-bold uppercase tracking-widest text-indigo-400 px-3 mb-3">
+            Menu Admin
+        </p>
+
+        <div class="space-y-1">
+
+            <a href="{{ route('admin.dashboard') }}"
+                class="{{ $baseLink }} {{ request()->routeIs('admin.dashboard') ? $active : $inactive }}">
+                <i class="fas fa-gauge-high w-4 text-center"></i>
                 Dashboard Admin
-                <i class="right fas fa-angle-left"></i>
-              </p>
             </a>
-          </li>
-          <li class="nav-item">
-  <a href="{{ route('poli.index') }}"
-    class="nav-link {{ request()->routeIs('poli.*') ? 'active' : '' }}">
-    <i class="nav-icon fas fa-user-md"></i>
-    <p>Manajemen Poli</p>
-  </a>
-</li>
-          </li>
-          <li class="nav-item">
-  <a href="{{ route('dokter.index') }}"
-    class="nav-link {{ request()->routeIs('dokter.*') ? 'active' : '' }}">
-    <i class="nav-icon fas fa-user-md"></i>
-    <p>Manajemen Dokter</p>
-  </a>
-</li>
-          <li class="nav-item">
-  <a href="{{ route('pasien.index') }}"
-    class="nav-link {{ request()->routeIs('pasien.*') ? 'active' : '' }}">
-    <i class="nav-icon fas fa-user-md"></i>
-    <p>Manajemen Pasien</p>
-  </a>
-</li>
-          <li class="nav-item">
-  <a href="{{ route('obat.index') }}"
-    class="nav-link {{ request()->routeIs('obat.*') ? 'active' : '' }}">
-    <i class="nav-icon fas fa-user-md"></i>
-    <p>Manajemen Obat</p>
-  </a>
-</li>
 
+            <a href="{{ route('polis.index') }}"
+                class="{{ $baseLink }} {{ request()->routeIs('polis.*') ? $active : $inactive }}">
+                <i class="fas fa-hospital w-4 text-center"></i>
+                Manajemen Poli
+            </a>
+
+            <a href="{{ route('dokter.index') }}"
+                class="{{ $baseLink }} {{ request()->routeIs('dokter.*') ? $active : $inactive }}">
+                <i class="fas fa-user-doctor w-4 text-center"></i>
+                Manajemen Dokter
+            </a>
+
+            <a href="{{ route('pasien.index') }}"
+                class="{{ $baseLink }} {{ request()->routeIs('pasien.*') ? $active : $inactive }}">
+                <i class="fas fa-bed-pulse w-4 text-center"></i>
+                Manajemen Pasien
+            </a>
+
+            <a href="{{ route('obat.index') }}"
+                class="{{ $baseLink }} {{ request()->routeIs('obat.*') ? $active : $inactive }}">
+                <i class="fas fa-pills w-4 text-center"></i>
+                Manajemen Obat
+            </a>
+
+        </div>
         @endif
 
-        <!-- ROLE PASIEN -->
-        @if (request()->is('pasien*'))
-          <li class="nav-item">
-            <a href="#" class="nav-link">
-              <i class="nav-icon fas fa-user-injured"></i>
-              <p>
+
+        {{-- ================= PASIEN ================= --}}
+        @if(request()->is('pasien*'))
+
+        <p class="text-xs uppercase tracking-widest text-indigo-400 px-3 mb-3 mt-6">
+            Menu Pasien
+        </p>
+
+        <div class="space-y-1">
+
+            <a href="{{ route('pasien.dashboard') }}"
+                class="{{ $baseLink }} {{ request()->routeIs('pasien.dashboard') ? $active : $inactive }}">
+                <i class="fas fa-house-medical w-4 text-center"></i>
                 Dashboard Pasien
-                <i class="right fas fa-angle-left"></i>
-              </p>
             </a>
-            <ul class="nav nav-treeview">
-              <li class="nav-item">
-                <a href="{{ route('pasien.dashboard') }}" class="nav-link {{ request()->routeIs('pasien.dashboard') ? 'active' : '' }}">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Dashboard v1</p>
-                </a>
-              </li>
-            </ul>
-          </li>
-          <li class="nav-item">
-  <a href="{{ route('pasien.daftar') }}"
-    class="nav-link {{ request()->routeIs('pasien.daftar') ? 'active' : '' }}">
-    <i class="nav-icon fas fa-user-md"></i>
-    <p>Poli</p>
-  </a>
-</li>
+
+            <a href="{{ route('pasien.daftar') }}"
+                class="{{ $baseLink }} {{ request()->routeIs('pasien.daftar*') ? $active : $inactive }}">
+                <i class="fas fa-calendar-plus w-4 text-center"></i>
+                Daftar Poli
+            </a>
+
+        </div>
         @endif
 
-        <!-- ROLE DOKTER -->
-        @if (request()->is('dokter*'))
-          <li class="nav-item">
-            <a href="#" class="nav-link">
-              <i class="nav-icon fas fa-user-md"></i>
-              <p>
+
+        {{-- ================= DOKTER ================= --}}
+        @if(request()->is('dokter*'))
+
+        <p class="text-xs uppercase tracking-widest text-indigo-400 px-3 mb-3 mt-6">
+            Menu Dokter
+        </p>
+
+        <div class="space-y-1">
+
+            <a href="{{ route('dokter.dashboard') }}"
+                class="{{ $baseLink }} {{ request()->routeIs('dokter.dashboard') ? $active : $inactive }}">
+                <i class="fas fa-stethoscope w-4 text-center"></i>
                 Dashboard Dokter
-                <i class="right fas fa-angle-left"></i>
-              </p>
             </a>
-            <ul class="nav nav-treeview">
-              <li class="nav-item">
-                <a href="{{ route('dokter.dashboard') }}" class="nav-link {{ request()->routeIs('dokter.dashboard') ? 'active' : '' }}">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Dashboard v1</p>
-                </a>
-              </li>
-            </ul>
-          </li>
-          <li class="nav-item">
-  <a href="{{ route('jadwal-periksa.index') }}"
-    class="nav-link {{ request()->routeIs('jadwal-periksa.*') ? 'active' : '' }}">
-    <i class="nav-icon fas fa-user-md"></i>
-    <p>Jadwal Periksa</p>
-  </a>
-</li>
-          <li class="nav-item">
-  <a href="{{ route('periksa-pasien.index') }}"
-    class="nav-link {{ request()->routeIs('periksa-pasien.*') ? 'active' : '' }}">
-    <i class="nav-icon fas fa-user-md"></i>
-    <p>Periksa Pasien</p>
-  </a>
-</li>
-          <li class="nav-item">
-  <a href="{{ route('riwayat-pasien.index') }}"
-    class="nav-link {{ request()->routeIs('riwayat-pasien.*') ? 'active' : '' }}">
-    <i class="nav-icon fas fa-user-md"></i>
-    <p>Riwayat Pasien</p>
-  </a>
-</li>
 
+            <a href="{{ route('jadwal-periksa.index') }}"
+                class="{{ $baseLink }} {{ request()->routeIs('jadwal-periksa.*') ? $active : $inactive }}">
+                <i class="fas fa-calendar-days w-4 text-center"></i>
+                Jadwal Periksa
+            </a>
+
+            <a href="{{ route('periksa-pasien.index') }}"
+                class="{{ $baseLink }} {{ request()->routeIs('periksa-pasien.*') ? $active : $inactive }}">
+                <i class="fas fa-notes-medical w-4 text-center"></i>
+                Periksa Pasien
+            </a>
+
+            <a href="{{ route('riwayat-pasien.index') }}"
+                class="{{ $baseLink }} {{ request()->routeIs('riwayat-pasien.*') ? $active : $inactive }}">
+                <i class="fas fa-clock-rotate-left w-4 text-center"></i>
+                Riwayat Pasien
+            </a>
+
+        </div>
         @endif
-      </ul>
-    </nav>
-  </div>
+
+    </div>
+
+
+    {{-- ================= LOGOUT ================= --}}
+    <div class="p-4 border-t border-white/10">
+        <form method="POST" action="/logout">
+            @csrf
+            <button type="submit"
+                class="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-red-500 hover:bg-red-600 text-white text-sm font-semibold transition-all">
+                <i class="fas fa-right-from-bracket w-4"></i>
+                Keluar
+            </button>
+        </form>
+    </div>
+
 </aside>

@@ -1,46 +1,61 @@
-<nav class="navbar navbar-expand navbar-white navbar-light">
-    <!-- Left navbar links -->
-    <ul class="navbar-nav">
-        <li class="nav-item">
-            <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
-        </li>
-        <li class="nav-item d-none d-sm-inline-block">
-            <a href="#" class="nav-link">Home</a>
-        </li>
-        <li class="nav-item d-none d-sm-inline-block">
-            <a href="#" class="nav-link">Contact</a>
-        </li>
-    </ul>
+<header class="bg-base-100 border-b border-base-300 h-16 flex items-center px-6 gap-4 sticky top-0 z-30 shadow-sm">
 
-    <!-- Right navbar links -->
-    <ul class="navbar-nav ml-auto">
-        <!-- Navbar Search -->
-        <li class="nav-item">
-            <a class="nav-link" data-widget="navbar-search" href="#" role="button">
-                <i class="fas fa-search"></i>
-            </a>
-            <div class="navbar-search-block">
-                <form class="form-inline">
-                    <div class="input-group input-group-sm">
-                        <input class="form-control form-control-navbar" type="search" placeholder="Search"
-                            aria-label="Search">
-                        <div class="input-group-append">
-                            <button class="btn btn-navbar" type="submit">
-                                <i class="fas fa-search"></i>
-                            </button>
-                            <button class="btn btn-navbar" type="button" data-widget="navbar-search">
-                                <i class="fas fa-times"></i>
-                            </button>
-                        </div>
-                    </div>
-                </form>
+    {{-- Mobile Hamburger --}}
+    <button onclick="toggleSidebar()" class="btn btn-square btn-ghost lg:hidden">
+        <i data-lucide="menu" class="w-5 h-5"></i>
+    </button>
+
+    {{-- Breadcrumb --}}
+    <div class="flex-1">
+        <div class="flex items-center gap-2 text-sm">
+            <span class="text-base-content/50">Poliklinik</span>
+            <i data-lucide="chevron-right" class="w-4 h-4 text-base-content/30"></i>
+            <span class="font-semibold text-base-content">
+                {{ $title ?? 'Dashboard' }}
+            </span>
+        </div>
+    </div>
+
+    {{-- Fullscreen --}}
+    <button onclick="toggleFullscreen()" class="btn btn-square btn-ghost">
+        <i id="fsIcon" class="fas fa-expand w-5 h-5"></i>
+    </button>
+
+    {{-- User Info --}}
+    <div class="flex items-center gap-3">
+
+        <div class="text-right hidden sm:block">
+            <div class="text-sm font-semibold leading-tight">
+                {{ auth()->user()->name ?? 'Pengguna' }}
             </div>
-        </li>
+            <div class="text-xs text-base-content/50 leading-tight">
+                {{ auth()->user()->role ?? 'Admin Sistem' }}
+            </div>
+        </div>
 
-        <li class="nav-item">
-            <a class="nav-link" data-widget="fullscreen" href="#" role="button">
-                <i class="fas fa-expand-arrows-alt"></i>
-            </a>
-        </li>
-    </ul>
-</nav>
+        <div class="avatar">
+            <div class="w-10 h-10 rounded-full bg-primary text-primary-content flex items-center justify-center">
+                <span class="text-sm font-semibold leading-none">
+                    {{ strtoupper(substr(auth()->user()->name ?? 'U', 0, 1)) }}
+                </span>
+            </div>
+        </div>
+    </div>
+
+</header>
+
+<script>
+    function toggleFullscreen() {
+    const icon = document.getElementById('fsIcon');
+
+    if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen();
+        icon.classList.remove('fa-expand');
+        icon.classList.add('fa-compress');
+    } else {
+        document.exitFullscreen();
+        icon.classList.remove('fa-compress');
+        icon.classList.add('fa-expand');
+    }
+}
+</script>

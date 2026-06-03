@@ -20,13 +20,7 @@ class JadwalPeriksa extends Model
         return $this->belongsTo(User::class, 'id_dokter');
     }
 
-    public function daftarPolis()
-    {
+    public function daftarPolis(){
         return $this->hasMany(DaftarPoli::class, 'id_jadwal');
-    }
-
-    public function poli()
-    {
-        return $this->belongsTo(Poli::class, 'id_poli');
     }
 }

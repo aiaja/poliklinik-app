@@ -1,38 +1,91 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id" data-theme="light">
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Title | Admin Dashboard</title>
-    <link rel="stylesheet" href="{{ asset('/css/app.css') }}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
-        integrity="sha512-Evv84MrkqGSIVRlgF/aZq0bYxQZycrdIWxtJHSh8CR7PBfaKCr51Ck+w/U6sWJzm1vVXs9Vx9ABhgm="
-        crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/css/adminlte.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css"
-        integrity="sha384-oX1oLFHLfeMPrJ0GpXh1LbcEPTINAed2xpHp5D9ESMjDYd0nLwMLNDG9y4HI+N" crossorigin="anonymous">
-    @stack('styles')
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ $title ?? 'Poliklinik' }}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@5/daisyui.css" rel="stylesheet">
+    @vite(['resources/js/app.js','resources/css/app.css'])
 </head>
 
-<body class="hold-transition sidebar-mini layout-fixed">
-    <div class="wrapper">
-        @include('components.partials.sidebar')
+<body>
 
-        <div class="content-wrapper">
-            @include('components.partials.header')
-            {{ $slot }}
+    <div class="app-wrapper">
+
+        {{-- SIDEBAR --}}
+        <div id="appSidebar" class="sidebar-fixed">
+            @include('components.partials.sidebar')
         </div>
 
-        @include('components.partials.footer')
+        {{-- OVERLAY --}}
+        <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+
+        {{-- MAIN --}}
+        <div class="main-content">
+
+            @include('components.partials.header')
+
+            <div class="main-scroll">
+
+                @if(session('success'))
+                <div class="alert alert-success mb-4 rounded-xl shadow-sm">
+                    <i class="fas fa-check-circle"></i>
+                    <span>{{ session('success') }}</span>
+                </div>
+                @endif
+
+                @if(session('error'))
+                <div class="alert alert-error mb-4 rounded-xl shadow-sm">
+                    <i class="fas fa-circle-xmark"></i>
+                    <span>{{ session('error') }}</span>
+                </div>
+                @endif
+
+                {{ $slot }}
+
+            </div>
+
+            @include('components.partials.footer')
+
+        </div>
+
     </div>
 
-    <script src="{{ asset('/js/app.js') }}"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"
-        integrity="sha512-894YE6QWD5I59oQYFneFdAnC6t1WfSnCoNpUtT9X+9p2Q1hYkd0+8PSIgn+e7PJoAe6u7bTu0WgJf0Y7ZqYig=="
-        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="https://cdn.jsdelivr.net/npm/admin-lte@3.1/dist/js/adminlte.min.js"></script>
+    <script>
+        function toggleSidebar(){
+            const sidebar=document.getElementById('appSidebar')
+            const overlay=document.getElementById('sidebarOverlay')
+
+            sidebar.classList.toggle('open')
+
+            overlay.style.display=
+            sidebar.classList.contains('open')
+            ? 'block'
+            : 'none'
+        }
+
+        function toggleFullscreen(){
+            const icon=document.getElementById('fsIcon')
+
+            if(!document.fullscreenElement){
+                document.documentElement.requestFullscreen()
+                icon.className='fas fa-compress'
+            }
+            else{
+                document.exitFullscreen()
+                icon.className='fas fa-expand'
+            }
+        }
+    </script>
+
     @stack('scripts')
+
 </body>
 
 </html>

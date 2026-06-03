@@ -1,96 +1,131 @@
-<x-layouts.app title="Poli">
-    <div class="container-fluid px-4 mt-4">
-        <div class="row">
-            <div class="col-lg-12">
-                {{-- ALERT FLASH MESSAGE --}}
-        @if (session('message'))
-          <div class="alert alert-{{ session('type', 'success') }} alert-dismissible fade show" role="alert">
-            {{ session('message') }}
-          </div>
-        @endif
-                <h1 class="mb-4">Poli</h1>
-                <section class="content">
-                    <div class="container-fluid">
-                        <div class="row">
-                            <div class="col-lg-12">
-                                <h5 class="card-header bg-gray">Daftar Poli</h5>
-                                <div class="card-body">
-                                    <form action="{{ route('pasien.daftar.submit') }}" method="POST">
-                                        @csrf
-                                        <input type="hidden" name="id_pasien" value="{{ $user->id }}">
+<x-layouts.app title="Daftar Poli">
 
-                                        <div class="mb-3">
-                                            <label for="no_rm" class="form-label">Nomor Rekam Medis</label>
-                                            <input type="text" class="form-control" id="no_rm" name="no_rm" value="{{ $user->no_rm }}" placeholder="Nomor Rekam Medis" disabled>
-                                        </div>
+    <div class="flex items-center justify-center px-4">
+        <div class="w-full max-w-3xl">
+            <div class="card bg-base-100 shadow">
+                <div class="card-body">
 
-                                        <div class="mb-3">
-                                            <label for="selectPoli" class="form-label">Pilih Poli</label>
-                                            <select name="id_poli" id="selectPoli" class="form-control">
-                                                <option value="">-- Pilih Poli --</option>
-                                                @foreach ($polis as $poli)
-                                                    <option value="{{ $poli->id }}">{{ $poli->nama_poli }}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
+                    <h2 class="text-2xl font-bold text-center mb-6">
+                        🏥 Pendaftaran Poli
+                    </h2>
 
-                                        <div class="mb-3">
-                                            <label for="selectJadwal" class="form-label">Pilih Jadwal Periksa</label>
-                                            <select name="id_jadwal" id="selectJadwal" class="form-control">
-                                                <option value="">-- Pilih Jadwal --</option>
-                                                @foreach ($jadwals as $jadwal)
-                                                    <option value="{{ $jadwal->id }}"
-                                                        data-id-poli="{{ $jadwal->dokter->poli->id ?? '' }}"
-                                                        data-nama-poli="{{ $jadwal->dokter->poli->nama_poli ?? '' }}">
-                                                        {{ $jadwal->hari }},
-                                                        {{ $jadwal->jam_mulai }} -
-                                                        {{ $jadwal->jam_selesai }}
-                                                        ({{ $jadwal->dokter->nama ?? '-' }})
-                                                    </option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-
-                                        <div class="mb-3">
-                                            <label for="keluhan" class="form-label">Keluhan</label>
-                                            <textarea name="keluhan" id="keluhan" rows="3" class="form-control"></textarea>
-                                        </div>
-
-                                        <button type="submit" name="submit" class="btn btn-primary">Daftar</button>
-                                    </form>
-                                </div>
-                            </div>
+                    {{-- Toast Success --}}
+                    @if (session('message'))
+                    <div id="toastSuccess" class="toast toast-top toast-end z-50">
+                        <div class="alert alert-success shadow-lg">
+                            <span> {{ session('message') }}</span>
                         </div>
                     </div>
-                </section>
+                    @endif
+
+                    {{-- Error --}}
+                    @if ($errors->any())
+                    <div class="alert alert-error mb-4">
+                        <ul class="list-disc pl-5">
+                            @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                    @endif
+
+                    <form action="{{ route('pasien.daftar.submit') }}" method="POST">
+                        @csrf
+                        <input type="hidden" name="id_pasien" value="{{ $user->id }}">
+
+                        {{-- Nomor RM --}}
+                        <div class="mb-4">
+                            <label class="font-semibold block mb-1">
+                                Nomor Rekam Medis
+                            </label>
+
+                            <input type="text" value="{{ $user->no_rm }}"
+                                class="w-full border-2 rounded-lg p-2 bg-gray-100" disabled>
+                        </div>
+
+                        {{-- Pilih Poli --}}
+                        <div class="mb-4">
+                            <label class="font-semibold block mb-1">
+                                Pilih Poli
+                            </label>
+
+                            <select name="id_poli" id="poliSelect" class="w-full border-2 rounded-lg p-2">
+                                <option value="">-- Pilih Poli --</option>
+                                @foreach ($polis as $poli)
+                                <option value="{{ $poli->id }}">
+                                    {{ $poli->nama_poli }}
+                                </option>
+                                @endforeach
+                            </select>
+
+                        </div>
+
+                        {{-- Pilih Jadwal --}}
+                        <div class="mb-4">
+                            <label class="font-semibold block mb-1">
+                                Pilih Jadwal Periksa
+                            </label>
+
+                            <select name="id_jadwal" id="jadwalSelect" class="w-full border-2 rounded-lg p-2">
+                                <option value="">-- Pilih Jadwal --</option>
+
+                                @foreach ($jadwals as $jadwal)
+                                <option value="{{ $jadwal->id }}" data-poli="{{ $jadwal->dokter->id_poli }}">
+                                    {{ $jadwal->hari }}
+                                    {{ $jadwal->jam_mulai }} - {{ $jadwal->jam_selesai }}
+                                    Dr. {{ $jadwal->dokter->nama ?? '--' }}
+                                </option>
+                                @endforeach
+
+                            </select>
+                        </div>
+
+                        {{-- Keluhan --}}
+                        <div class="mb-6">
+                            <label class="font-semibold block mb-1">
+                                Keluhan
+                            </label>
+                            <textarea name="keluhan" rows="3" class="w-full border-2 rounded-lg p-2"
+                                placeholder="Tulis keluhan anda..."></textarea>
+                        </div>
+
+                        <div class="flex justify-end">
+                            <button type="submit"
+                                class="px-8 py-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition">
+                                Daftar Poli
+                            </button>
+                        </div>
+                    </form>
+
+                </div>
             </div>
         </div>
     </div>
 
+    @push('scripts')
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const selectPoli = document.getElementById('selectPoli');
-            const selectJadwal = document.getElementById('selectJadwal');
+        document.addEventListener("DOMContentLoaded", function(){
 
-            // Saat poli dipilih, filter jadwal
-            selectPoli.addEventListener('change', function () {
-                const poliId = this.value;
-                Array.from(selectJadwal.options).forEach(option => {
-                    if(!option.value) return;
-                    option.hidden = (option.dataset.idPoli !== poliId && poliId !== '');
-                });
-                selectJadwal.value = "";
-            });
+    const poliSelect = document.getElementById("poliSelect")
+    const jadwalSelect = document.getElementById("jadwalSelect")
+    const jadwalOptions = jadwalSelect.querySelectorAll("option")
 
-            // Saat jadwal dipilih, isi poli otomatis jika belum
-            selectJadwal.addEventListener('change', function () {
-                const selected = this.options[this.selectedIndex];
-                const poliId = selected.dataset.idPoli;
-                if (!selectPoli.value && poliId) {
-                    selectPoli.value = poliId;
-                    selectPoli.dispatchEvent(new Event('change'));
-                }
-            });
-        });
+    poliSelect.addEventListener("change", function(){
+        let poliId = this.value
+        jadwalOptions.forEach(option => {
+            if(option.value === ""){
+                option.style.display = "block"
+                return
+            }
+            if(option.dataset.poli === poliId){
+                option.style.display = "block"
+            }else{
+                option.style.display = "none"
+            }
+        })
+        jadwalSelect.value = ""
+    })
+        })
     </script>
+    @endpush
 </x-layouts.app>

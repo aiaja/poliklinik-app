@@ -7,14 +7,11 @@ use App\Models\DaftarPoli;
 use App\Models\DetailPeriksa;
 use App\Models\Obat;
 use App\Models\Periksa;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class PeriksaPasienController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
         $dokterId = Auth::id();
@@ -27,23 +24,18 @@ class PeriksaPasienController extends Controller
             ->get();
 
         return view('dokter.periksa-pasien.index', compact('daftarPasien'));
-
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create($id)
+
+   public function create($id)
     {
         $obats = Obat::all();
         return view('dokter.periksa-pasien.create', compact('obats', 'id'));
-
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+
+
+public function store(Request $request)
     {
         $request->validate([
             'obat_json' => 'required',
@@ -70,35 +62,4 @@ class PeriksaPasienController extends Controller
         return redirect()->route('periksa-pasien.index')->with('success', 'Data periksa berhasil disimpan.');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
-    }
 }

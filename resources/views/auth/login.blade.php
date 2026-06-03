@@ -1,60 +1,118 @@
-{{-- <h2>Login</h2> --}}
-@if ($errors->any())
-  <p style="color:red">{{ $errors->first() }}</p>
-@endif
+<x-layouts.guest title="Login">
 
-<!-- <form method="POST" action="{{ route('login') }}">
-  @csrf
-  <label>Email:</label><br>
-  <input type="email" name="email" required><br>
+    <div class="card bg-base-100 shadow-2xl rounded-2xl w-full max-w-[420px]">
+        <div class="card-body my-2 p-[40px]">
 
-  <label>Password:</label><br>
-  <input type="password" name="password" required><br><br>
+            {{-- Logo & Title --}}
+            <div class="text-center mb-8">
+                <img src="{{ asset('images/logo-bengkot.png') }}"
+                    class="w-[60px] h-[60px] rounded-[16px] object-cover mx-auto mb-[14px] block">
 
-  <button type="submit">Login</button>
-</form> -->
+                <h1 class="text-[1.5rem] font-extrabold text-[#1e2d6b] m-0 mb-[6px]">
+                    Poliklinik
+                </h1>
 
-<x-layouts.guest>
-  <div class="login-box d-flex flex-column justify-content-center align-items-center w-100 vh-100">
-    <div class="login-logo">
-      <a href="/login"><b>Poliklinik</b></a>
+                <p class="text-[0.83rem] text-slate-400 m-0">
+                    Masuk ke akun Anda
+                </p>
+            </div>
+
+
+            {{-- Error Alert --}}
+            @if ($errors->any())
+            <div class="alert alert-error mb-5 rounded-xl text-[0.83rem]">
+                <i class="fas fa-circle-xmark"></i>
+                <span>{{ $errors->first() }}</span>
+            </div>
+            @endif
+
+
+            <form action="{{ route('login') }}" method="POST">
+                @csrf
+
+
+                {{-- Email --}}
+                <div class="form-control mb-4">
+
+                    <label class="label pb-1">
+                        <span class="text-[0.82rem] font-semibold text-gray-700">
+                            Email
+                        </span>
+                    </label>
+
+                    <label class="input input-bordered flex items-center gap-3 rounded-[10px] border-slate-200 bg-slate-50">
+                        <i class="fas fa-envelope text-slate-400 text-[0.82rem]"></i>
+
+                        <input type="email" name="email" value="{{ old('email') }}" placeholder="Masukkan email..."
+                            class="grow bg-transparent text-slate-800 text-[0.88rem]" required>
+                    </label>
+
+                </div>
+
+
+                {{-- Password --}}
+                <div class="form-control mb-6">
+
+                    <label class="label pb-1">
+                        <span class="text-[0.82rem] font-semibold text-gray-700">
+                            Password
+                        </span>
+                    </label>
+
+                    <label class="input input-bordered flex items-center gap-3 rounded-[10px] border-slate-200 bg-slate-50">
+                        <i class="fas fa-lock text-slate-400 text-[0.82rem]"></i>
+
+                        <input type="password" name="password" id="password_login" placeholder="Masukkan password..."
+                            class="grow bg-transparent text-slate-800 text-[0.88rem]" required>
+
+                        <i class="fas fa-eye text-slate-400 text-[0.82rem] cursor-pointer" id="toggle_login"
+                            onclick="togglePassword('password_login', 'toggle_login')"></i>
+
+                    </label>
+
+                </div>
+
+
+                {{-- Submit Button --}}
+                <button type="submit" class="btn-primary-gradient mt-6">
+                    <i class="fas fa-right-to-bracket"></i>
+                    Login
+                </button>
+
+            </form>
+
+
+            {{-- Register --}}
+            <p class="text-center mt-5 text-[0.83rem] text-slate-400">
+                Belum punya akun?
+                <a href="{{ route('register') }}" class="text-[#2d4499] font-bold no-underline">
+                    Register
+                </a>
+            </p>
+
+        </div>
     </div>
-    <!-- .login-logo -->
-    <div class="card">
-      <div class="card-body login-card-body">
-        <p class="login-box-msg">Harap login terlebih dahulu!</p>
-        <form method="POST" action="{{ route('login') }}">
-          @csrf
-          <div class="input-group mb-3">
-            <input type="email" class="form-control" placeholder="Email" name="email">
-            <div class="input-group-text">
-              <span class="fas fa-envelope"></span>
-            </div>
-          </div>
 
-          <div class="input-group mb-3">
-            <input type="password" class="form-control" placeholder="Password" name="password" required>
-            <div class="input-group-append">
-              <div class="input-group-text">
-                <span class="fas fa-lock"></span>
-              </div>
-            </div>
-          </div>
 
-          @if ($errors->any())
-            <p style="color:red">{{ $errors->first() }}</p>
-          @endif
+    @push('scripts')
+    <script>
+        function togglePassword(inputId, iconId) {
 
-          <div class="row">
-            <div class="col-8">
-              <button type="submit" class="btn btn-primary">Sign In</button>
-            </div>
-          </div>
-        </form>
-      </div>
-    </div>
-    <p class="mb-0">
-      Belum punya akun? <a href="{{ route('register') }}">Daftar</a>
-    </p>
-  </div>
+            const input = document.getElementById(inputId);
+            const icon  = document.getElementById(iconId);
+
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.classList.replace('fa-eye', 'fa-eye-slash');
+            } 
+            else {
+                input.type = 'password';
+                icon.classList.replace('fa-eye-slash', 'fa-eye');
+            }
+
+        }
+
+    </script>
+    @endpush
+
 </x-layouts.guest>

@@ -1,94 +1,141 @@
 <x-layouts.app title="Edit Pasien">
-  <div class="container-fluid px-4 mt-4">
-    <div class="row">
-      <div class="col-lg-8 offset-lg-2">
-        <h1 class="mb-4">Edit Pasien</h1>
 
-        <div class="card">
-          <div class="card-body">
-            <form action="{{ route('pasien.update', $pasien->id) }}" method="POST">
-              @csrf
-              @method('PUT')
+    {{-- Header --}}
+    <div class="flex items-center gap-3 mb-6">
+        <a href="{{ route('pasien.index') }}" class="flex items-center justify-center w-9 h-9 rounded-lg 
+                  bg-slate-100 hover:bg-slate-200 
+                  text-slate-600 transition">
+            <i class="fas fa-arrow-left text-sm"></i>
+        </a>
 
-              <div class="row">
-                <div class="col-md-6">
-                  <div class="form-group mb-3">
-                    <label for="nama" class="form-label">Nama Pasien <span class="text-danger">*</span></label>
-                    <input type="text" name="nama" id="nama" class="form-control @error('nama') is-invalid @enderror"
-                      value="{{ old('nama', $pasien->nama) }}" required>
-                    @error('nama')
-                      <div class="invalid-feedback">{{ $message }}</div>
-                    @enderror
-                  </div>
-                </div>
-
-                <div class="col-md-6">
-                  <div class="form-group mb-3">
-                    <label for="email" class="form-label">Email <span class="text-danger">*</span></label>
-                    <input type="email" name="email" id="email" class="form-control @error('email') is-invalid @enderror"
-                      value="{{ old('email', $pasien->email) }}" required>
-                    @error('email')
-                      <div class="invalid-feedback">{{ $message }}</div>
-                    @enderror
-                  </div>
-                </div>
-              </div>
-
-              <div class="row">
-                <div class="col-md-6">
-                  <div class="form-group mb-3">
-                    <label for="no_ktp" class="form-label">No. KTP <span class="text-danger">*</span></label>
-                    <input type="text" name="no_ktp" id="no_ktp" class="form-control @error('no_ktp') is-invalid @enderror"
-                      value="{{ old('no_ktp', $pasien->no_ktp) }}" maxlength="16" required>
-                    @error('no_ktp')
-                      <div class="invalid-feedback">{{ $message }}</div>
-                    @enderror
-                  </div>
-                </div>
-
-                <div class="col-md-6">
-                  <div class="form-group mb-3">
-                    <label for="no_hp" class="form-label">No. HP <span class="text-danger">*</span></label>
-                    <input type="text" name="no_hp" id="no_hp" class="form-control @error('no_hp') is-invalid @enderror"
-                      value="{{ old('no_hp', $pasien->no_hp) }}" required>
-                    @error('no_hp')
-                      <div class="invalid-feedback">{{ $message }}</div>
-                    @enderror
-                  </div>
-                </div>
-              </div>
-
-              <div class="form-group mb-3">
-                <label for="alamat" class="form-label">Alamat <span class="text-danger">*</span></label>
-                <textarea name="alamat" id="alamat" rows="3" class="form-control @error('alamat') is-invalid @enderror"
-                  required>{{ old('alamat', $pasien->alamat) }}</textarea>
-                @error('alamat')
-                  <div class="invalid-feedback">{{ $message }}</div>
-                @enderror
-              </div>
-
-              <div class="form-group mb-3">
-                <label for="password" class="form-label">Password</label>
-                <input type="password" name="password" id="password" class="form-control @error('password') is-invalid @enderror"
-                  minlength="6">
-                <small class="form-text text-muted">Kosongkan jika tidak ingin mengubah password</small>
-                @error('password')
-                  <div class="invalid-feedback">{{ $message }}</div>
-                @enderror
-              </div>
-
-              <div class="form-group mt-4">
-                <button type="submit" class="btn btn-primary">
-                  <i class="fas fa-save"></i> Update
-                </button>
-                <a href="{{ route('pasien.index') }}" class="btn btn-secondary">
-                  <i class="fas fa-arrow-left"></i> Kembali
-                </a>
-              </div>
-            </form>
-          </div>
-        </div>
-      </div>
+        <h2 class="text-2xl font-bold text-slate-800">
+            Edit Pasien
+        </h2>
     </div>
-  </div>
+
+    {{-- Card --}}
+    <div class="card bg-base-100 shadow-md rounded-2xl border border-slate-200">
+        <div class="card-body p-8">
+
+            <form action="{{ route('pasien.update', $pasien->id) }}" method="POST">
+                @csrf
+                @method('PUT')
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+
+                    {{-- Nama --}}
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-700 mb-1">
+                            Nama Pasien <span class="text-red-500">*</span>
+                        </label>
+                        <input type="text" name="nama" value="{{ old('nama', $pasien->nama) }}"
+                            placeholder="Masukkan nama pasien..."
+                            class="w-full px-4 py-2 rounded-lg border-2 border-slate-300 
+                                   focus:border-primary focus:outline-none
+                                   @error('nama') border-red-500 @enderror"
+                            required>
+                        @error('nama')
+                        <p class="text-xs text-red-500 mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    {{-- Email --}}
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-700 mb-1">
+                            Email <span class="text-red-500">*</span>
+                        </label>
+                        <input type="email" name="email" value="{{ old('email', $pasien->email) }}"
+                            placeholder="Masukkan email..."
+                            class="w-full px-4 py-2 rounded-lg border-2 border-slate-300 
+                                   focus:border-primary focus:outline-none
+                                   @error('email') border-red-500 @enderror"
+                            required>
+                        @error('email')
+                        <p class="text-xs text-red-500 mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    {{-- No KTP --}}
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-700 mb-1">
+                            No. KTP <span class="text-red-500">*</span>
+                        </label>
+                        <input type="number" name="no_ktp" value="{{ old('no_ktp', $pasien->no_ktp) }}"
+                            placeholder="Masukkan No. KTP..."
+                            class="w-full px-4 py-2 rounded-lg border-2 border-slate-300 
+                                   focus:border-primary focus:outline-none
+                                   @error('no_ktp') border-red-500 @enderror"
+                            required>
+                        @error('no_ktp')
+                        <p class="text-xs text-red-500 mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    {{-- No HP --}}
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-700 mb-1">
+                            No. HP <span class="text-red-500">*</span>
+                        </label>
+                        <input type="number" name="no_hp" value="{{ old('no_hp', $pasien->no_hp) }}"
+                            placeholder="Masukkan No. HP..."
+                            class="w-full px-4 py-2 rounded-lg border-2 border-slate-300 
+                                   focus:border-primary focus:outline-none
+                                   @error('no_hp') border-red-500 @enderror"
+                            required>
+                        @error('no_hp')
+                        <p class="text-xs text-red-500 mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                </div>
+
+                {{-- Alamat --}}
+                <div class="mb-6">
+                    <label class="block text-sm font-semibold text-slate-700 mb-1">
+                        Alamat <span class="text-red-500">*</span>
+                    </label>
+                    <textarea name="alamat" rows="3" placeholder="Masukkan alamat..."
+                        class="w-full px-4 py-2 rounded-lg border-2 border-slate-300 
+                               focus:border-primary focus:outline-none
+                               @error('alamat') border-red-500 @enderror"
+                        required>{{ old('alamat', $pasien->alamat) }}</textarea>
+                    @error('alamat')
+                    <p class="text-xs text-red-500 mt-1">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                {{-- Password --}}
+                <div class="mb-8">
+                    <label class="block text-sm font-semibold text-slate-700 mb-1">
+                        Password
+                    </label>
+                    <input type="password" name="password"
+                        placeholder="Kosongkan jika tidak ingin mengubah..."
+                        class="w-full px-4 py-2 rounded-lg border-2 border-slate-300 
+                               focus:border-primary focus:outline-none
+                               @error('password') border-red-500 @enderror">
+                    @error('password')
+                    <p class="text-xs text-red-500 mt-1">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                {{-- Buttons --}}
+                <div class="flex gap-3">
+                    <button type="submit"
+                        class="px-6 py-2.5 rounded-lg bg-primary hover:bg-primary/90 
+                               text-white font-semibold text-sm transition">
+                        <i class="fas fa-save mr-1"></i> Update
+                    </button>
+
+                    <a href="{{ route('pasien.index') }}"
+                        class="px-6 py-2.5 rounded-lg bg-slate-100 hover:bg-slate-200 
+                               text-slate-600 font-semibold text-sm transition">
+                        Batal
+                    </a>
+                </div>
+
+            </form>
+        </div>
+    </div>
+
 </x-layouts.app>
