@@ -2,79 +2,63 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
-use Illuminate\Http\Request;
+use App\Http\Requests\Auth\LoginRequest;
+use App\Http\Requests\Auth\RegisterPatientRequest;
+use App\Services\Auth\PatientRegistrationService;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
+use Illuminate\View\View;
 
 class AuthController extends Controller
 {
-    public function showLogin()
+    /**
+     * Show the login form.
+     */
+    public function showLogin(): View
     {
         return view('auth.login');
     }
 
-    public function login(Request $request)
+    /**
+     * Handle an authentication attempt.
+     */
+    public function login(LoginRequest $request): RedirectResponse
     {
-        $credentials = $request->only('email', 'password');
-
-        if (Auth::attempt($credentials)) {
+        if (Auth::attempt($request->validated())) {
             $user = Auth::user();
-            if ($user->role == 'admin') {
-                return redirect()->route('admin.dashboard');
-            } elseif ($user->role == 'dokter') {
-                return redirect()->route('dokter.dashboard');
-            } else {
-                return redirect()->route('pasien.dashboard');
-            }
+            
+            return match ($user->role) {
+                'admin' => redirect()->route('admin.dashboard'),
+                'dokter' => redirect()->route('dokter.dashboard'),
+                default => redirect()->route('pasien.dashboard'),
+            };
         }
 
         return back()->withErrors(['email' => 'Email atau Password Salah !']);
     }
 
-    public function showRegister()
+    /**
+     * Show the registration form.
+     */
+    public function showRegister(): View
     {
         return view('auth.register');
     }
 
-    public function register(Request $request)
+    /**
+     * Handle a registration request for a patient.
+     */
+    public function register(RegisterPatientRequest $request, PatientRegistrationService $service): RedirectResponse
     {
-        $request->validate([
-            'nama' => ['required', 'string', 'max:255'],
-            'alamat' => ['required', 'string', 'max:255'],
-            'no_ktp' => ['required', 'string', 'max:30'],
-            'no_hp' => ['required', 'string', 'max:20'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email'],
-            'password' => ['required', 'confirmed'],
-        ]);
+        $service->register($request->validated());
 
-        //cek apakah nomor KTP sudah terdaftar
-        if(User::where('no_ktp', $request->no_ktp)->exists()) {
-            return back()->withErrors(['no_ktp' => 'Nomor Ktp Sudah terdaftar']);
-        }
-
-        $no_rm = date('Ym') . '-' . str_pad(
-            User::where('no_rm', 'like', date('Ym') . '-%')->count() + 1,
-            3,
-            '0',
-            STR_PAD_LEFT
-        );
-
-         User::create([
-            'nama' => $request->nama,
-            'alamat' => $request->alamat,
-            'no_ktp' => $request->no_ktp,
-            'no_hp' => $request->no_hp,
-            'no_rm' => $no_rm,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-            'role' => 'pasien',
-        ]);
-
-        return redirect()->route('login');
+        return redirect()->route('login')->with('success', 'Registrasi berhasil, silakan login.');
     }
 
-    public function logout()
+    /**
+     * Log the user out of the application.
+     */
+    public function logout(): RedirectResponse
     {
         Auth::logout();
         return redirect()->route('login');

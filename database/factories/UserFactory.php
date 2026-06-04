@@ -24,21 +24,45 @@ class UserFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => fake()->name(),
+            'nama' => fake()->name(),
+            'alamat' => fake()->address(),
+            'no_ktp' => fake()->numerify('################'),
+            'no_hp' => fake()->phoneNumber(),
             'email' => fake()->unique()->safeEmail(),
-            'email_verified_at' => now(),
             'password' => static::$password ??= Hash::make('password'),
             'remember_token' => Str::random(10),
+            'role' => 'pasien',
         ];
     }
 
     /**
-     * Indicate that the model's email address should be unverified.
+     * Indicate that the user is an admin.
      */
-    public function unverified(): static
+    public function admin(): static
     {
         return $this->state(fn (array $attributes) => [
-            'email_verified_at' => null,
+            'role' => 'admin',
+        ]);
+    }
+
+    /**
+     * Indicate that the user is a dokter.
+     */
+    public function dokter(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'role' => 'dokter',
+        ]);
+    }
+
+    /**
+     * Indicate that the user is a pasien.
+     */
+    public function pasien(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'role' => 'pasien',
+            'no_rm' => fake()->numerify('202603-###'),
         ]);
     }
 }
